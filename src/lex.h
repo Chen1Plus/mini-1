@@ -32,10 +32,10 @@ typedef enum {
     END_FILE,
 } TokenType;
 
-extern bool match(TokenType);
-extern void regret();
-extern void next();
-extern char *getLex();
+bool match(TokenType);
+void regret();
+void next();
+char *getLex();
 
 typedef struct Node {
     TokenType tok;
