@@ -31,6 +31,8 @@ static struct {
     } tbl[TBL_SIZE];
 } m_tmp;
 
+bool isInt(int reg) { return m_reg[reg].type == NUM; }
+
 void ownReg(int idx) {
     int id = m_reg[idx].id;
     switch (m_reg[idx].type) {

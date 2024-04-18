@@ -8,6 +8,7 @@
 
 #define TBL_SIZE 64
 
+bool isInt(int reg);
 void ownReg(int idx);
 void modReg(const char *op, int r1, int r2);
 
