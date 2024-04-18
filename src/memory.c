@@ -158,6 +158,7 @@ void addTmp(int reg) {
     if (m_tmp.cnt >= TBL_SIZE) err("temporary table overflows\n");
     ownReg(reg);
     m_reg[reg].type              = TMP;
+    m_reg[reg].id                = m_tmp.cnt;
     m_tmp.tbl[m_tmp.cnt].in_reg  = true;
     m_tmp.tbl[m_tmp.cnt].reg_idx = reg;
     m_tmp.cnt++;
