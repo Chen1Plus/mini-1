@@ -99,6 +99,8 @@ int getInt(int n) {
 }
 
 void setSym(const char *key, int reg) {
+    ownReg(reg);
+
     int i = 0;
     for (; i < m_sym.cnt; i++)
         if (strcmp(m_sym.tbl[i].key, key) == 0) {
@@ -111,7 +113,6 @@ void setSym(const char *key, int reg) {
     i = m_sym.cnt++;
 
 write:
-    ownReg(reg);
     m_reg[reg].type      = VAR;
     m_reg[reg].id        = i;
     m_sym.tbl[i].in_reg  = true;
@@ -143,14 +144,14 @@ void getXYZ() {
     if (!m_sym.tbl[1].in_reg) {
         printf("MOV r1 [4]\n");
     } else {
-        printf("MOV r1 r%d\n", m_sym.tbl[0].reg_idx);
+        printf("MOV r1 r%d\n", m_sym.tbl[1].reg_idx);
     }
 
     ownReg(2);
     if (!m_sym.tbl[2].in_reg) {
         printf("MOV r2 [8]\n");
     } else {
-        printf("MOV r2 r%d\n", m_sym.tbl[0].reg_idx);
+        printf("MOV r2 r%d\n", m_sym.tbl[2].reg_idx);
     }
 }
 
