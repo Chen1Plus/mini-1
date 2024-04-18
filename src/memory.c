@@ -99,8 +99,6 @@ int getInt(int n) {
 }
 
 void setSym(const char *key, int reg) {
-    ownReg(reg);
-
     int i = 0;
     for (; i < m_sym.cnt; i++)
         if (strcmp(m_sym.tbl[i].key, key) == 0) {
@@ -113,6 +111,7 @@ void setSym(const char *key, int reg) {
     i = m_sym.cnt++;
 
 write:
+    ownReg(reg);
     m_reg[reg].type      = VAR;
     m_reg[reg].id        = i;
     m_sym.tbl[i].in_reg  = true;
