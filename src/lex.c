@@ -33,7 +33,7 @@ static Lex lex_cur     = {.token = UNKNOWN, .lexeme = ""};
     }
 
 static TokenType lex_getToken() {
-    char c = (char) fgetc(stdin);
+    char c = (char)fgetc(stdin);
     while (c == ' ' || c == '\t') c = (char)fgetc(stdin);
 
     // ID: [_[:alpha:]][_[:alnum:]]*
@@ -93,7 +93,7 @@ bool match(TokenType token) {
     return (lex_regret ? lex_last : lex_cur).token == token;
 }
 
-char *getLex() { return (lex_regret ? lex_last : lex_cur).lexeme; }
+char *getLex() { return lex_regret ? lex_last.lexeme : lex_cur.lexeme; }
 
 Node *newNode(TokenType tok, const char *lexeme) {
     Node *node = calloc(1, sizeof(Node));
