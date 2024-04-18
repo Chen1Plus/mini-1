@@ -97,24 +97,23 @@ int getInt(int n) {
 }
 
 void setSym(const char *key, int reg) {
-    int target = -1;
-    for (int i = 0; i < m_sym.cnt; i++)
+    int i = 0;
+    for (; i < m_sym.cnt; i++)
         if (strcmp(m_sym.tbl[i].key, key) == 0) {
             if (m_sym.tbl[i].in_reg && m_sym.tbl[i].reg_idx == reg) return;
-            target = i;
             goto write;
         }
 
     if (m_sym.cnt >= TBL_SIZE) err("symbol table overflows\n");
     strcpy(m_sym.tbl[m_sym.cnt].key, key);
-    target = m_sym.cnt++;
+    i = m_sym.cnt++;
 
 write:
     ownReg(reg);
-    m_reg[reg].type           = VAR;
-    m_reg[reg].id             = target;
-    m_sym.tbl[target].in_reg  = true;
-    m_sym.tbl[target].reg_idx = reg;
+    m_reg[reg].type      = VAR;
+    m_reg[reg].id        = i;
+    m_sym.tbl[i].in_reg  = true;
+    m_sym.tbl[i].reg_idx = reg;
 }
 
 int getSym(const char *key) {
@@ -130,16 +129,28 @@ int getSym(const char *key) {
     err("undefined symbol: %s\n" COMMA key);
 }
 
-// void getXYZ() {
-//     for (int i = 0; i < 3; i++) ownReg(i);
+void getXYZ() {
+    ownReg(0);
+    if (!m_sym.tbl[0].in_reg) {
+        printf("MOV r0 [0]\n");
+    } else {
+        printf("MOV r0 r%d\n", m_sym.tbl[0].reg_idx);
+    }
 
-//     for (int i = 0; i < 3; i++) {
-//         int reg = getRegSpace(-1);
-//         printf("MOV r%d [%d]\n", reg, i * 4);
-//         m_sym.tbl[i].in_reg  = true;
-//         m_sym.tbl[i].reg_idx = reg;
-//     }
-// }
+    ownReg(1);
+    if (!m_sym.tbl[1].in_reg) {
+        printf("MOV r1 [4]\n");
+    } else {
+        printf("MOV r1 r%d\n", m_sym.tbl[0].reg_idx);
+    }
+
+    ownReg(2);
+    if (!m_sym.tbl[2].in_reg) {
+        printf("MOV r2 [8]\n");
+    } else {
+        printf("MOV r2 r%d\n", m_sym.tbl[0].reg_idx);
+    }
+}
 
 void addTmp(int reg) {
     if (m_tmp.cnt >= TBL_SIZE) err("temporary table overflows\n");

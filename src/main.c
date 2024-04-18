@@ -21,8 +21,8 @@ int main() {
     next_loop:
         freeTree(root);
     }
-    // getXYZ();
-    for (int i = 0; i < 8; i++) ownReg(i);
-    printf("x: r%d\ny: r%d\nz: r%d\n", getSym("x"), getSym("y"), getSym("z"));
+    getXYZ();
+    // for (int i = 0; i < 8; i++) ownReg(i);
+    // printf("x: r%d\ny: r%d\nz: r%d\n", getSym("x"), getSym("y"), getSym("z"));
     printf("EXIT 0\n");
 }
