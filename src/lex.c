@@ -118,22 +118,22 @@ Node *try_(TokenType tok) {
     return retp;
 }
 
-#define expect_err(tok)                                    \
-    switch (tok) {                                         \
-        case ID:             err("expect identifier\n");   \
-        case INT:            err("expect integer\n");      \
-        case L_PAREN:        err("expect '('\n");          \
-        case R_PAREN:        err("expect ')'\n");          \
-        case ADD_SUB:        err("expect '+' or '-'\n");   \
-        case MUL_DIV:        err("expect '*' or '/'\n");   \
-        case INC_DEC:        err("expect '++' or '--'\n"); \
-        case AND:            err("expect '&'\n");          \
-        case OR:             err("expect '|'\n");          \
-        case XOR:            err("expect '^'\n");          \
-        case ASSIGN:         err("expect '='\n");          \
-        case ADD_SUB_ASSIGN: err("expect '+=' or '-='\n"); \
-        case END:            err("expect '\\n'\n");        \
-        default:             err("undefined expect\n");                \
+#define expect_err(tok)                                  \
+    switch (tok) {                                       \
+        case ID:             err("expect identifier");   \
+        case INT:            err("expect integer");      \
+        case L_PAREN:        err("expect '('");          \
+        case R_PAREN:        err("expect ')'");          \
+        case ADD_SUB:        err("expect '+' or '-'");   \
+        case MUL_DIV:        err("expect '*' or '/'");   \
+        case INC_DEC:        err("expect '++' or '--'"); \
+        case AND:            err("expect '&'");          \
+        case OR:             err("expect '|'");          \
+        case XOR:            err("expect '^'");          \
+        case ASSIGN:         err("expect '='");          \
+        case ADD_SUB_ASSIGN: err("expect '+=' or '-='"); \
+        case END:            err("expect '\\n'");        \
+        default:             err("undefined expect");                \
     }
 
 Node *expect(TokenType tok) {
