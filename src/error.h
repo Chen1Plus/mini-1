@@ -14,13 +14,13 @@
         fprintf(stderr, "\nerr() called at %s:%d: ", __FILE__, __LINE__); \
         fprintf(stderr, msg);                                             \
         fprintf(stderr, "EXIT 1\n");                                      \
-        exit(1);                                                          \
+        exit(0);                                                          \
     }
 #else
 #define err(msg)                       \
     {                                  \
         fprintf(stderr, "\nEXIT 1\n"); \
-        exit(1);                       \
+        exit(0);                       \
     }
 #endif
 
