@@ -33,8 +33,8 @@ static Lex lex_cur     = {.token = UNKNOWN, .lexeme = ""};
     }
 
 static TokenType lex_getToken() {
-    char c = (char)fgetc(stdin);
-    while (c == ' ' || c == '\t') c = (char)fgetc(stdin);
+    char c = fgetc(stdin);
+    while (c == ' ' || c == '\t') c = fgetc(stdin);
 
     // ID: [_[:alpha:]][_[:alnum:]]*
     if (c == '_' || isalpha(c)) {
@@ -52,7 +52,7 @@ static TokenType lex_getToken() {
         case '+':
         case '-':
             lex_write_c();
-            lex_cur.lexeme[1] = (char)fgetc(stdin);
+            lex_cur.lexeme[1] = fgetc(stdin);
             lex_cur.lexeme[2] = '\0';
 
             if (lex_cur.lexeme[1] == c) return INC_DEC;
@@ -89,8 +89,8 @@ void next() {
 }
 
 bool match(TokenType token) {
-    if ((lex_regret ? lex_last : lex_cur).token == UNKNOWN) next();
-    return (lex_regret ? lex_last : lex_cur).token == token;
+    if ((lex_regret ? lex_last.token : lex_cur.token) == UNKNOWN) next();
+    return (lex_regret ? lex_last.token : lex_cur.token) == token;
 }
 
 char *getLex() { return lex_regret ? lex_last.lexeme : lex_cur.lexeme; }
