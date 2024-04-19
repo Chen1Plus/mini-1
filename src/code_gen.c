@@ -1,9 +1,11 @@
 #include "code_gen.h"
 
+#include <limits.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "error.h"
 #include "lex.h"
 #include "memory.h"
 
@@ -60,7 +62,42 @@ void printPrefix(Node *root) {
     printPrefix(root->rc);
 }
 
+// return const value; otherwise, return INT_MIN
+int evalValue(Node *root) {
+    int lv, rv;
+    switch (root->tok) {
+        case INT: return atoi(root->lexeme);
+
+        case ADD_SUB:
+        case MUL_DIV:
+        case AND:
+        case OR:
+        case XOR:
+            lv = evalValue(root->lc);
+            rv = evalValue(root->rc);
+            if (lv == INT_MIN || rv == INT_MIN) return INT_MIN;
+
+            switch (root->lexeme[0]) {
+                case '+': return lv + rv;
+                case '-': return lv - rv;
+                case '*': return lv * rv;
+                case '/':
+                    if (rv == 0) err("division by zero\n");
+                    return lv / rv;
+                case '&': return lv & rv;
+                case '|': return lv | rv;
+                case '^': return lv ^ rv;
+                default:  return INT_MIN;  //! unreachable
+            }
+
+        default: return INT_MIN;
+    }
+}
+
 int evaluateTree(Node *root) {
+    int x = evalValue(root);
+    if (x != INT_MIN) return getInt(x);
+
     if (root->tok == INT) return getInt(atoi(root->lexeme));
     if (root->tok == ID) return getSym(root->lexeme);
 
@@ -103,7 +140,10 @@ int evaluateTree(Node *root) {
         case '+': modReg("ADD", lv, rv); break;
         case '-': modReg("SUB", lv, rv); break;
         case '*': modReg("MUL", lv, rv); break;
-        case '/': modReg("DIV", lv, rv); break;
+        case '/':
+            if (isZero(rv)) err("division by zero\n");
+            modReg("DIV", lv, rv);
+            break;
         case '&': modReg("AND", lv, rv); break;
         case '|': modReg("OR", lv, rv); break;
         case '^': modReg("XOR", lv, rv); break;
