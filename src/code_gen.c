@@ -9,7 +9,7 @@
 #include "lex.h"
 #include "memory.h"
 
-// return const value; otherwise, return INT_MIN
+// return const value; if not const, return INT_MIN
 int evalValue(Node *root) {
     int lv, rv;
     switch (root->tok) {
@@ -42,10 +42,13 @@ int evalValue(Node *root) {
 }
 
 int evaluateTree(Node *root) {
+    // const expression
     int x = evalValue(root);
     if (x != INT_MIN) return getInt(x);
+    if (root->tok == INT)
+        return getInt(atoi(root->lexeme));  // work when INT's value is INT_MIN
 
-    if (root->tok == INT) return getInt(atoi(root->lexeme));
+    // variable
     if (root->tok == ID) return getSym(root->lexeme);
 
     int lv, rv;
