@@ -5,7 +5,6 @@
 #include "lex.h"
 #include "memory.h"
 
-extern int evaluateTree(Node *);
-extern void printPrefix(Node *);
+int evaluateTree(Node *);
 
 #endif  // CODE_GEN_H

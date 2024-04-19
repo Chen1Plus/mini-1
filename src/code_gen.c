@@ -9,59 +9,6 @@
 #include "lex.h"
 #include "memory.h"
 
-// int evaluateTree(Node *root) {
-//     if (!root) return 0;
-//     if (root->tok == INT || root->val) return root->val;
-
-//     switch (root->tok) {
-//         case ID: return getSym(root->lexeme);
-
-//         case ASSIGN: return setSym(root->lc->lexeme, evaluateTree(root->rc));
-
-//         case ADD_SUB_ASSIGN:
-//             return setSym(
-//                 root->lc->lexeme,
-//                 root->lexeme[0] == '+'
-//                     ? getSym(root->lc->lexeme) + evaluateTree(root->rc)
-//                     : getSym(root->lc->lexeme) - evaluateTree(root->rc));
-
-//         case INC_DEC:
-//             return setSym(
-//                 root->rc->lexeme,
-//                 getSym(root->rc->lexeme) + (root->lexeme[0] == '+' ? 1 :
-//                 -1));
-
-//         case ADD_SUB:
-//         case MUL_DIV:
-//         case AND:
-//         case OR:
-//         case XOR:
-//             int lv = evaluateTree(root->lc);
-//             int rv = evaluateTree(root->rc);
-
-//             switch (root->lexeme[0]) {
-//                 case '+': return lv + rv;
-//                 case '-': return lv - rv;
-//                 case '*': return lv * rv;
-//                 case '/':
-//                     if (rv == 0) err("division by zero\n");
-//                     return lv / rv;
-//                 case '&': return lv & rv;
-//                 case '|': return lv | rv;
-//                 case '^': return lv ^ rv;
-//                 default:  return 0;  //! unreachable
-//             }
-//         default: return 0;  //! unreachable
-//     }
-// }
-
-void printPrefix(Node *root) {
-    if (!root) return;
-    printf("%s ", root->lexeme);
-    printPrefix(root->lc);
-    printPrefix(root->rc);
-}
-
 // return const value; otherwise, return INT_MIN
 int evalValue(Node *root) {
     int lv, rv;
