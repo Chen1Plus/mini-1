@@ -39,7 +39,6 @@ char *getLex();
 
 typedef struct Node {
     TokenType tok;
-    int val;
     char lexeme[MAX_LEX];
     struct Node *lc;  // left child
     struct Node *rc;  // right child
