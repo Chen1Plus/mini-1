@@ -62,7 +62,6 @@ typedef enum {
 
 typedef struct Node {
     TokenType tok;
-    int val;
     char lexeme[MAX_LEX];
     struct Node* lc;  // left child
     struct Node* rc;  // right child
@@ -455,26 +454,10 @@ int getSym(const char* key) {
 }
 
 void getXYZ() {
-    ownReg(0);
-    if (!m_sym.tbl[0].in_reg) {
-        printf("MOV r0 [0]\n");
-    } else {
-        printf("MOV r0 r%d\n", m_sym.tbl[0].reg_idx);
-    }
-
-    ownReg(1);
-    if (!m_sym.tbl[1].in_reg) {
-        printf("MOV r1 [4]\n");
-    } else {
-        printf("MOV r1 r%d\n", m_sym.tbl[1].reg_idx);
-    }
-
-    ownReg(2);
-    if (!m_sym.tbl[2].in_reg) {
-        printf("MOV r2 [8]\n");
-    } else {
-        printf("MOV r2 r%d\n", m_sym.tbl[2].reg_idx);
-    }
+    for (int i = 0; i < 8; i++) ownReg(i);
+    printf("MOV r0 [0]\n");
+    printf("MOV r1 [4]\n");
+    printf("MOV r2 [8]\n");
 }
 
 void addTmp(int reg) {
@@ -510,40 +493,42 @@ void printPrefix(Node* root) {
     printPrefix(root->rc);
 }
 
-// return the const value; otherwise, return INT_MIN
-// int evalValue(Node* root) {
-//     int lv, rv;
-//     switch (root->tok) {
-//         case ADD_SUB:
-//         case MUL_DIV:
-//         case AND:
-//         case OR:
-//         case XOR:
-//             lv = evalValue(root->lc), rv = evalValue(root->rc);
-//             if (lv == INT_MIN || rv == INT_MIN) return INT_MIN;
+// return const value; otherwise, return INT_MIN
+int evalValue(Node *root) {
+    int lv, rv;
+    switch (root->tok) {
+        case INT: return atoi(root->lexeme);
 
-//             switch (root->lexeme[0]) {
-//                 case '+': return lv + rv;
-//                 case '-': return lv - rv;
-//                 case '*': return lv * rv;
-//                 case '/':
-//                     if (rv == 0) err("division by zero\n");
-//                     return lv / rv;
-//                 case '&': return lv & rv;
-//                 case '|': return lv | rv;
-//                 case '^': return lv ^ rv;
-//                 default:  return INT_MIN;  //! unreachable
-//             }
+        case ADD_SUB:
+        case MUL_DIV:
+        case AND:
+        case OR:
+        case XOR:
+            lv = evalValue(root->lc);
+            rv = evalValue(root->rc);
+            if (lv == INT_MIN || rv == INT_MIN) return INT_MIN;
 
-//         case INT: return atoi(root->lexeme);
-//         default:  return INT_MIN;
-//     }
-// }
+            switch (root->lexeme[0]) {
+                case '+': return lv + rv;
+                case '-': return lv - rv;
+                case '*': return lv * rv;
+                case '/':
+                    if (rv == 0) err("division by zero\n");
+                    return lv / rv;
+                case '&': return lv & rv;
+                case '|': return lv | rv;
+                case '^': return lv ^ rv;
+                default:  return INT_MIN;  //! unreachable
+            }
+
+        default: return INT_MIN;
+    }
+}
 
 int evaluateTree(Node* root) {
     // if the root is a const value, return it
-    // int x = evalValue(root);
-    // if (x != INT_MIN) return getInt(x);
+    int x = evalValue(root);
+    if (x != INT_MIN) return getInt(x);
 
     if (root->tok == INT) return getInt(atoi(root->lexeme));
     if (root->tok == ID) return getSym(root->lexeme);
