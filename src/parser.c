@@ -91,11 +91,9 @@ static Node* assignment() {
     Node *root, *left = try_(ID);
     if (!left) return or_expr();
 
-    if (match(ASSIGN))
-        root = try_(ASSIGN);
-    else if (match(ADD_SUB_ASSIGN))
-        root = try_(ADD_SUB_ASSIGN);
-    else {
+    if ((root = try_(ASSIGN))) {
+    } else if ((root = try_(ADD_SUB_ASSIGN))) {
+    } else {
         regret();
         free(left);
         return or_expr();
